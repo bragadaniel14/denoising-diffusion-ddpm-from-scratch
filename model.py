@@ -47,8 +47,21 @@ def q_sample(x0, t, noise, alphas_cumprod):
     steps = extract_into_batch(alphas_cumprod, t, x0)
     return x0 * torch.sqrt(steps) + torch.sqrt(1-steps) * noise
 
-# Step 6 - build_diffusion_schedule (not yet solved)
-# TODO: implement
+# Step 6 - build_diffusion_schedule
+import torch
+import torch.nn.functional as F
+
+def build_diffusion_schedule(T: int = 100, beta_start: float = 1e-4, beta_end: float = 0.02) -> dict:
+    # TODO: build betas, alphas, alphas_cumprod and useful sqrts
+    betas = torch.linspace(beta_start,beta_end,T)
+    return {
+        'betas':betas,
+        'alphas':1-betas,
+        'alphas_cumprod': torch.cumprod(1-betas,dim=0),
+        'sqrt_alphas_cumprod': torch.sqrt(torch.cumprod(1-betas,dim=0)),
+        'sqrt_one_minus_alphas_cumprod': torch.sqrt(1-torch.cumprod(1-betas,dim=0)),
+        'T':T
+    }
 
 # Step 7 - noise_prediction_loss (not yet solved)
 # TODO: implement
