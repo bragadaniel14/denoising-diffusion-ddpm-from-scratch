@@ -178,8 +178,14 @@ def train_ddpm(dataset, params: dict, schedule: dict, num_steps: int = 50, batch
         history.append(loss)
     return params, history
 
-# Step 15 - predict_x0_from_eps (not yet solved)
-# TODO: implement
+# Step 15 - predict_x0_from_eps
+import torch
+import torch.nn.functional as F
+
+def predict_x0_from_eps(x_t, t, eps, alphas_cumprod):
+    # TODO: invert the q_sample equation for x0
+    alphas = extract_into_batch(alphas_cumprod, t, x_t)
+    return (x_t - torch.sqrt(1-alphas)*eps)/torch.sqrt(alphas)
 
 # Step 16 - ddpm_p_mean_variance (not yet solved)
 # TODO: implement
