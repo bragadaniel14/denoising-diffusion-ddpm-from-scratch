@@ -38,8 +38,14 @@ def extract_into_batch(a, t, x):
     # TODO: gather a[t] and reshape to (B, 1, 1, 1) for broadcasting with x
     return torch.gather(a, dim=0, index=t).view(-1,1,1,1)
 
-# Step 5 - q_sample (not yet solved)
-# TODO: implement
+# Step 5 - q_sample
+import torch
+import torch.nn.functional as F
+
+def q_sample(x0, t, noise, alphas_cumprod):
+    # TODO: x_t = sqrt(bar_alpha_t) * x0 + sqrt(1 - bar_alpha_t) * noise
+    steps = extract_into_batch(alphas_cumprod, t, x0)
+    return x0 * torch.sqrt(steps) + torch.sqrt(1-steps) * noise
 
 # Step 6 - build_diffusion_schedule (not yet solved)
 # TODO: implement
